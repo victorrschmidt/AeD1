@@ -10,7 +10,6 @@ typedef struct {
 } NameList_t;
 
 char buffer[MAX_BUFFER_SIZE];
-NameList_t nameList;
 
 /*
 ====================
@@ -70,7 +69,7 @@ ReadName
 ====================
 */
 void ReadName( void ) {
-    memset( buffer, 0, sizeof(buffer) );
+    memset( buffer, 0, sizeof( buffer ) );
     printf( "Digite um nome: " );
     scanf( "%s", buffer );
 }
@@ -81,15 +80,19 @@ AddName
  Adiciona a string do buffer na lista de nomes.
 ====================
 */
-void AddName( void ) {
+void AddName( NameList_t *nameList ) {
     ReadName();
     size_t length = strlen( buffer );
-    nameList.chain = realloc( nameList.chain, nameList.size + length + 1 );
-    for ( size_t i = nameList.size; i < nameList.size + length; i++ ) {
-        nameList.chain[i] = buffer[i - nameList.size];
+    if ( nameList->size == 0 ) {
+        nameList->chain = malloc( (length + 1) * sizeof( char ) );
+    } else {
+        nameList->chain = realloc( nameList->chain, ( nameList->size + length + 1 ) * sizeof( char ) );
     }
-    nameList.size += length + 1;
-    nameList.nameCount++;
+    for ( size_t i = nameList->size; i < nameList->size + length; i++ ) {
+        nameList->chain[i] = buffer[i - nameList->size];
+    }
+    nameList->size += length + 1;
+    nameList->nameCount++;
     printf( "Nome adicionado!\n" );
 }
 
@@ -100,22 +103,26 @@ RemoveName
  do buffer (se existir) da lista de nomes.
 ====================
 */
-void RemoveName( void ) {
+void RemoveName( NameList_t *nameList ) {
     ReadName();
-    const char *ptr = nameList.chain;
-    for ( size_t i = 0; i < nameList.nameCount; i++ ) {
+    const char *ptr = nameList->chain;
+    for ( size_t i = 0; i < nameList->nameCount; i++ ) {
         if ( strcmp( ptr, buffer ) == 0 ) {
             const size_t length = strlen( ptr );
-            size_t l = ptr - nameList.chain;
+            size_t l = ptr - nameList->chain;
             size_t r = l + length + 1;
-            while ( r < nameList.size ) {
-                nameList.chain[l] = nameList.chain[r];
+            while ( r < nameList->size ) {
+                nameList->chain[l] = nameList->chain[r];
                 l++;
                 r++;
             }
-            nameList.chain = realloc( nameList.chain, nameList.size - length - 1 );
-            nameList.size -= length + 1;
-            nameList.nameCount--;
+            if ( nameList->nameCount == 1 ) {
+                free( nameList->chain );
+            } else {
+                nameList->chain = realloc( nameList->chain, ( nameList->size - length - 1 ) * sizeof( char ) );
+            }
+            nameList->size -= length + 1;
+            nameList->nameCount--;
             printf( "Nome removido!\n" );
             return;
         }
@@ -133,14 +140,14 @@ ShowNames
  Mostra todos os nomes contidos na lista de nomes.
 ====================
 */
-void ShowNames( void ) {
-    if ( nameList.nameCount == 0 ) {
+void ShowNames( NameList_t *nameList ) {
+    if ( nameList->nameCount == 0 ) {
         printf( "A lista de nomes esta vazia.\n" );
         return;
     }
     printf( "Lista de nomes:\n" );
-    const char *ptr = nameList.chain;
-    for ( size_t i = 0; i < nameList.nameCount; i++ ) {
+    const char *ptr = nameList->chain;
+    for ( size_t i = 0; i < nameList->nameCount; i++ ) {
         printf( "%zu - %s\n", i + 1, ptr );
         while ( *ptr != '\0' ) {
             ptr++;
@@ -150,7 +157,7 @@ void ShowNames( void ) {
 }
 
 int main() {
-    nameList.chain = malloc( 0 );
+    NameList_t nameList;
     nameList.size = 0;
     nameList.nameCount = 0;
 
@@ -158,17 +165,19 @@ int main() {
         int option = ReadMenuOption();
         ClearTerminal();
         if ( option == 1 ) {
-            AddName();
+            AddName( &nameList );
         } else if ( option == 2 ) {
-            RemoveName();
+            RemoveName( &nameList );
         } else if ( option == 3 ) {
-            ShowNames();
+            ShowNames( &nameList );
         } else {
             break;
         }
     }
 
-    free( nameList.chain );
+    if ( nameList.size > 0 ) {
+        free( nameList.chain );
+    }
 
     return 0;
 }
