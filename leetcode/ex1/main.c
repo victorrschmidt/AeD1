@@ -1,15 +1,9 @@
-#include <stdio.h>
-#include <string.h>
-#define MAX_BUFFER_SIZE 32
-
-char buffer[MAX_BUFFER_SIZE];
-
-int RomanToInt( char *s ) {
+int romanToInt( char *s ) {
     const char *twoLettersChars[] = { "IV", "IX", "XL", "XC", "CD", "CM" };
     const char *oneLetterChars = "IVXLCDM";
     const int twoLettersValues[] = { 4, 9, 40, 90, 400, 900 };
     const int oneLetterValues[] = { 1, 5, 10, 50, 100, 500, 1000 };
-    size_t length = strlen( s );
+    const size_t length = strlen( s );
     int count = 0;
 
     for ( size_t i = 0; i < length; i++ ) {
@@ -39,11 +33,4 @@ int RomanToInt( char *s ) {
     }
 
     return count;
-}
-
-int main( void ) {
-    scanf( "%s", buffer );
-    printf( "%d\n", RomanToInt( buffer ) );
-
-    return 0;
 }

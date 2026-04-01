@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-int ThirdMax( int *nums, int numsSize ) {
+int thirdMax( int *nums, int numsSize ) {
     int list[4];
     int listSize = 0;
 
@@ -58,32 +55,9 @@ int ThirdMax( int *nums, int numsSize ) {
         }
     }
 
-    // Se a lista esta cheia, retornar o terceiro maior numero.
-    // Caso contrario, retornar o maior numero
     if ( listSize == 3 ) {
         return list[2];
     } else {
         return list[0];
     }
-}
-
-int main() {
-    int numsSize;
-    scanf( "%d", &numsSize );
-    int *nums = malloc( numsSize * sizeof( int ) );
-
-    if ( nums == NULL ) {
-        printf( "Erro de memoria.\n" );
-        return 1;
-    }
-
-    for ( int i = 0; i < numsSize; i++ ) {
-        scanf( "%d", &nums[i] );
-    }
-
-    printf( "%d\n", ThirdMax( nums, numsSize ) );
-
-    free( nums );
-
-    return 0;
 }
