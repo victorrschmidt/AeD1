@@ -8,7 +8,13 @@ da Computação da Universidade Federal de Pelotas.
 
 ## Misc
 
-Comando para testar arquivo no Valgrind:
+Comando de compilação:
+
+```
+gcc main.c -o -Wall run
+```
+
+Comando de execução com o Valgrind:
 
 ```
 valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all ./run
