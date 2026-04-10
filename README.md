@@ -11,7 +11,7 @@ da Computação da Universidade Federal de Pelotas.
 Comando de compilação:
 
 ```
-gcc main.c -o -Wall run
+gcc main.c -Wall -o run
 ```
 
 Comando de execução com o Valgrind:
