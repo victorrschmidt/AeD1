@@ -1,3 +1,4 @@
+.vscode
 tests/output/main
 *.d
 *.o
