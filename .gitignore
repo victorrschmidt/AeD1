@@ -1,1 +1,3 @@
 tests/output/main
+*.d
+*.o
