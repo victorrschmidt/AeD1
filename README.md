@@ -8,14 +8,22 @@ da Computação da Universidade Federal de Pelotas.
 
 ## Misc
 
-Comando de compilação:
+Para testar um algoritmo, é necessário entrar na pasta ```tests```.
 
 ```
-gcc main.c -Wall -o run
+cd tests
 ```
 
-Comando de execução com o Valgrind:
+O arquivo ```main.c``` estará na pasta ```src```.
+
+Para compilar e executar o arquivo:
 
 ```
-valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all ./run
+make run
+```
+
+Para compilar e executar o arquivo com o Valgrind:
+
+```
+make valgrind
 ```
